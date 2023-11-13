@@ -1,0 +1,114 @@
+{
+    "assessments": {
+        "careteam_id1": {
+            "Week 1": {
+                "current_question_index": 0
+            }
+        },
+        "careteam_id2": {
+            "Week 1": {
+                "current_question_index": 0
+            }
+        },
+        "deploy5": {
+            "Week 2": {
+                "current_question_index": 0
+            },
+            "Week 3": {
+                "current_question_index": 0
+            },
+            "Week 4": {
+                "current_question_index": 0
+            }
+        },
+        "deploy2": {
+            "Week 3": {
+                "Q1": {
+                    "question": "Can the patient feed herself without assistance or does she need help during meal times?",
+                    "response": "Manages independently",
+                    "title": "Daily Activities",
+                    "score": 3
+                },
+                "current_question_index": 1
+            },
+            "Week 4": {
+                "Q1": {
+                    "question": "Can the patient feed herself without assistance or does she need help during meal times?",
+                    "response": "Manages independently",
+                    "title": "Daily Activities",
+                    "score": 3
+                },
+                "current_question_index": 12,
+                "Q2": {
+                    "question": "I see. Moving on, when it comes to dressing, can the patient put on her clothes without any assistance? Or does she struggle with certain aspects like buttons, zippers, or shoe laces?",
+                    "response": "Manages independently",
+                    "title": "Daily Activities",
+                    "score": 3
+                },
+                "Q3": {
+                    "question": "Got it. How about transferring? Is the patient able to move in and out of her bed or chair on her own? Or does she need some help or an assistive device for that?",
+                    "response": "Manages independently",
+                    "title": "Mobility",
+                    "score": 3
+                },
+                "Q4": {
+                    "question": "How would you rate the patient\u2019s ability to walk a block or climb a flight of stairs or more?",
+                    "response": "Manages independently",
+                    "title": "Mobility",
+                    "score": 3
+                },
+                "Q5": {
+                    "question": "Has Martha experienced any difficulties with memory, attention, or problem-solving that affected daily life?",
+                    "response": "Manages independently",
+                    "title": "Cognition",
+                    "score": 3
+                },
+                "Q6": {
+                    "question": "Thank you. Has the patient exhibited difficulties in recognizing their environment or wandered away from home lately?",
+                    "response": "Manages independently",
+                    "title": "Cognition",
+                    "score": 3
+                },
+                "Q7": {
+                    "question": "Has the patient felt agitated, anxious, irritable, or depressed?",
+                    "response": "Manages independently",
+                    "title": "Mind",
+                    "score": 3
+                },
+                "Q8": {
+                    "question": "Thank you for answering. From late afternoon till night, has the patient shown increased confusion, disorientation, restlessness, or difficulty sleeping?",
+                    "response": "Manages independently",
+                    "title": "Mind",
+                    "score": 3
+                },
+                "Q9": {
+                    "question": "Thanks for that. Now, let's move on to some instrumental activities. Can the patient prepare and cook meals by herself? Or does she require help with certain dishes or prefer pre-prepared meals?",
+                    "response": "Manages independently",
+                    "title": "Independence (IADL)",
+                    "score": 3
+                },
+                "Q10": {
+                    "question": "Understood. When it comes to her medications, can the patient manage and take them correctly without supervision? Or does she sometimes forget and need reminders?",
+                    "response": "Manages independently",
+                    "title": "Independence (IADL)",
+                    "score": 3
+                },
+                "Q11": {
+                    "question": "Now, thinking about the patient\u2019s social activity. Has Martha had any difficulty interacting with relatives or friends or participating in community or social activities?",
+                    "response": "Manages independently",
+                    "title": "Independence (IADL)",
+                    "score": 3
+                },
+                "Q12": {
+                    "question": "How frequently does the patient engage in social activities or maintain relationships?",
+                    "response": "Manages independently",
+                    "title": "Independence (IADL)",
+                    "score": 3
+                }
+            },
+            "Week 5": {
+                "current_question_index": 0
+            }
+        }
+    }
+}

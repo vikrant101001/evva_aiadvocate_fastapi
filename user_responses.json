@@ -1,0 +1,156 @@
+{
+    "check_ins": {
+        "careteam_id1": {
+            "Week 1": {
+                "current_question_index": 0
+            }
+        },
+        "careteam_id2": {
+            "Week 1": {
+                "current_question_index": 0
+            }
+        },
+        "trial4": {
+            "Week 2": {
+                "current_question_index": 0
+            },
+            "Week 3": {
+                "Q1": {
+                    "question": {
+                        "question": "How is the patient's mood today?",
+                        "options": [
+                            "Agitated",
+                            "Angry",
+                            "Frustrated",
+                            "Lost",
+                            "Neutral",
+                            "Happy"
+                        ]
+                    },
+                    "response": "Lost"
+                },
+                "current_question_index": 1
+            }
+        },
+        "deploy2": {
+            "Week 3": {
+                "current_question_index": 0
+            },
+            "Week 4": {
+                "current_question_index": 0
+            },
+            "Week 5": {
+                "current_question_index": 0
+            }
+        },
+        "btrial1": {
+            "Week 4": {
+                "Q1": {
+                    "question": {
+                        "question": "How is the patient's mood today?",
+                        "options": [
+                            "Agitated",
+                            "Angry",
+                            "Frustrated",
+                            "Lost",
+                            "Neutral",
+                            "Happy"
+                        ]
+                    },
+                    "response": "agitated"
+                },
+                "current_question_index": 1
+            },
+            "Week 5": {
+                "Q1": {
+                    "question": {
+                        "question": "How is the patient's mood today?",
+                        "options": [
+                            "Agitated",
+                            "Angry",
+                            "Frustrated",
+                            "Lost",
+                            "Neutral",
+                            "Happy"
+                        ]
+                    },
+                    "response": "agitated"
+                },
+                "current_question_index": 7,
+                "Q2": {
+                    "question": {
+                        "question": "Has the patient experienced any of the following in the past week?",
+                        "options": [
+                            "Increasing irritability",
+                            "Wandering",
+                            "Delusions"
+                        ]
+                    },
+                    "response": "agitated"
+                },
+                "Q3": {
+                    "question": {
+                        "question": "How was the patient's sleep yesterday?",
+                        "options": [
+                            "Well rested",
+                            "Woke up once",
+                            "Woke up 2 or 3 times",
+                            "Woke up 4 or more times",
+                            "Disrupted"
+                        ]
+                    },
+                    "response": "agitated"
+                },
+                "Q4": {
+                    "question": {
+                        "question": "Has the patient experienced any vomiting in the past week? (yes/no)",
+                        "options": [
+                            "yes",
+                            "no"
+                        ]
+                    },
+                    "response": "agitated"
+                },
+                "Q5": {
+                    "question": {
+                        "question": "How many times in the past week?",
+                        "options": [
+                            "Once only",
+                            "2 to 3 times",
+                            "4 to 5 times",
+                            "More than 5 times"
+                        ]
+                    },
+                    "response": "agitated"
+                },
+                "Q6": {
+                    "question": {
+                        "question": "For how long did the episode last?",
+                        "options": [
+                            "Less than 30 minutes",
+                            "30 mins to an hour",
+                            "1 to 4 hours",
+                            "Full day"
+                        ]
+                    },
+                    "response": "agitated"
+                },
+                "Q7": {
+                    "question": {
+                        "question": "How did it impact the patient's daily activities?",
+                        "options": [
+                            "Difficulty eating and drinking",
+                            "Difficulty walking",
+                            "Fatigue",
+                            "Severe dehydration"
+                        ]
+                    },
+                    "response": "agitated"
+                }
+            },
+            "Week 6": {
+                "current_question_index": 0
+            }
+        }
+    }
+}
