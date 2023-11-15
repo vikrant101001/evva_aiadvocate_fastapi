@@ -2,9 +2,6 @@
 
 import sys, select, time, os, subprocess
 
-from dotenv import load_dotenv
-
-load_dotenv()
 
 p = 1
 if p!=1:
