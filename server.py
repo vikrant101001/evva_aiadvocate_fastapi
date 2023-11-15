@@ -39,8 +39,7 @@ import os
 
 
 app = FastAPI()
-
-
+#no dotenv here
 
 
 # Enable CORS
