@@ -76,7 +76,13 @@ llmChain = LLMChain(prompt=prompt,
 
 history = []
 
-openai.api_key = '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'
+from dotenv import load_dotenv
+
+
+
+
+# Access the API key
+openai_api_key = os.getenv('OPENAI_API_KEY')
 API_SECRET = os.getenv('API_SECRET')
 
 
