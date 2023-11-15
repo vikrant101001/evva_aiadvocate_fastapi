@@ -41,7 +41,7 @@ import os
 app = FastAPI()
 #no dotenv here
 #new files added
-
+#added env vars
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
