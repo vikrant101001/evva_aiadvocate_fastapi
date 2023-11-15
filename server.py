@@ -41,9 +41,7 @@ import os
 app = FastAPI()
 
 
-from dotenv import load_dotenv
 
-load_dotenv()
 
 # Enable CORS
 app.add_middleware(
@@ -83,7 +81,7 @@ from dotenv import load_dotenv
 
 # Access the API key
 openai.api_key = os.environ["OPENAI_API_KEY"]
-API_SECRET = os.getenv('API_SECRET')
+API_SECRET = os.environ["API_SECRET"]
 
 
 
