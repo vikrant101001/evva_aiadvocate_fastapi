@@ -71,6 +71,9 @@ llmChain = LLMChain(prompt=prompt,
 
 history = []
 
+os.environ['API_SECRET'] = 'my secret'
+os.environ['OPENAI_API_KEY'] = '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'
+
 openai.api_key = os.environ["OPENAI_API_KEY"]
 API_SECRET = os.environ.get(
   'API_SECRET')
