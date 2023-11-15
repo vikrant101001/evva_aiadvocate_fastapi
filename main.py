@@ -2,7 +2,7 @@
 
 import sys, select, time, os, subprocess
 
-
+#added env in azure
 p = 1
 if p!=1:
   print("You must set an API_SECRET using the Secrets tool", file=sys.stderr)
