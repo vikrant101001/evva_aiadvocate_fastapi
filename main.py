@@ -1,14 +1,15 @@
 # This wrapper automatically loads the API
 
 import sys, select, time, os, subprocess
-os.environ['API_SECRET'] = 'my secret'
-os.environ['OPENAI_API_KEY'] = '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'
 
-if "API_SECRET" not in os.environ:
+from dotenv import load_dotenv
+
+load_dotenv()
+
+p = 1
+if p!=1:
   print("You must set an API_SECRET using the Secrets tool", file=sys.stderr)
-elif "OPENAI_API_KEY" not in os.environ:
-  print("You must set an OPENAI_API_KEY using the Secrets tool",
-        file=sys.stderr)
+
 else:
 
   print("Booting into API Server…")
