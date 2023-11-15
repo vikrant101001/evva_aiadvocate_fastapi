@@ -40,6 +40,11 @@ import os
 
 app = FastAPI()
 
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
@@ -71,18 +76,11 @@ llmChain = LLMChain(prompt=prompt,
 
 history = []
 
-os.environ['API_SECRET'] = 'my secret'
-os.environ['OPENAI_API_KEY'] = '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'
+openai.api_key = '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'
+API_SECRET = os.getenv('API_SECRET')
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
-API_SECRET = os.environ.get(
-  'API_SECRET')
 
-@app.on_event("startup")
-def load_openai_api_key():
-  openai.api_key = os.environ["OPENAI_API_KEY"]
-  API_SECRET = os.environ.get(
-    'API_SECRET')
+
 #***************CHECKIN MODULE***********************************
 # Load existing data from the JSON file, if any
 json_file_path = 'user_responses.json'
@@ -665,9 +663,9 @@ async def ask(request: Request,
   # Construct the connection URL
   db_connection_url = f"postgresql://{username}:{password}@{hostname}/{database_name}"
 
-  api_secret_from_frontend = request.headers.get('X-API-SECRET')
-  if api_secret_from_frontend != API_SECRET:
-    raise HTTPException(status_code=401, detail="Unauthorized access")
+  #api_secret_from_frontend = request.headers.get('X-API-SECRET')
+  #if api_secret_from_frontend != API_SECRET:
+  #  raise HTTPException(status_code=401, detail="Unauthorized access")
 
   careteam_id = request.headers.get('careteam_id', "not implied")
   caregiver_id = request.headers.get('caregiver_id', "not implied")
