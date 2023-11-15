@@ -82,7 +82,7 @@ from dotenv import load_dotenv
 
 
 # Access the API key
-openai_api_key = os.getenv('OPENAI_API_KEY')
+openai.api_key = os.environ["OPENAI_API_KEY"]
 API_SECRET = os.getenv('API_SECRET')
 
 
