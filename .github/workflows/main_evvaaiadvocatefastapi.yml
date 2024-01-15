@@ -54,11 +54,6 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      - name: Set up environment variables
-        run: |
-          echo "OPENAI_API_KEY=$OPENAI_API_KEY" >> $GITHUB_ENV
-          echo "API_SECRET=$API_SECRET" >> $GITHUB_ENV
-
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
