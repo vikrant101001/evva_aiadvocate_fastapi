@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v1
         with:
-          python-version: '3.9'  # Use Python 3.9 for compatibility
+          python-version: '3.11.3'  # Use Python 3.9 for compatibility
 
       - name: Create and start virtual environment
         run: |
