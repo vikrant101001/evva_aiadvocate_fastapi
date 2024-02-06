@@ -1,4 +1,4 @@
-awscli==1.32.34
+awscli
 annotated-types==0.6.0
 anyio==4.2.0
 blinker==1.7.0
