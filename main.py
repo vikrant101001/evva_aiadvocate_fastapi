@@ -59,7 +59,8 @@ async def upload_file_to_s3(req: Request):
         return JSONResponse(content={"message": "File uploaded successfully to S3!"}, status_code=200)
     except HTTPException as http_exc:
         return JSONResponse(content={"message": str(http_exc.detail)}, status_code=http_exc.status_code)
-    except Exception:
+    except Exception as e:
+        print("error:",e)
         return JSONResponse(content={"message": "Internal Server Error"}, status_code=500)
 
 
