@@ -47,7 +47,7 @@ def upload_file_to_s3():
         return jsonify({"message": str(value_error)}), 400
     except Exception as e:
         print("error:", e)
-        return jsonify({"message": "Internal Server Error"}), 500
+        return jsonify({"message": "Internal Server Error","error":e}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
