@@ -1,47 +1,33 @@
-from fastapi import FastAPI, HTTPException, Request
-from fastapi.responses import JSONResponse
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import os
 import subprocess
-from fastapi.middleware.cors import CORSMiddleware
 import logging
 import shutil
 from datetime import datetime
-from starlette.middleware import Middleware
-from starlette.middleware.cors import CORSMiddleware as StarletteCORSMiddleware
 from docx import Document
 
-# Add more permissive CORS settings during development
-origins = ["*"]
-
-# Add the middleware
-app = FastAPI(
-    title="DrQA backend API",
-    docs_url="/docs",
-    middleware=[
-        Middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"]),
-        Middleware(StarletteCORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"]),
-    ]
-)
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 logging.basicConfig(level=logging.INFO)
 
 def upload_to_s3(file_path, s3_bucket, s3_key):
     command = f"aws s3 cp {file_path} s3://{s3_bucket}/{s3_key}"
-    with subprocess.Popen(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE) as process:
-        process.communicate()
-        
-@app.get("/")
+    subprocess.run(command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+@app.route("/")
 def index():
-  return "S3 API Online"
-    
-@app.post("/uploads3")
-async def upload_file_to_s3(req: Request):
+    return "S3 API Online"
+
+@app.route("/uploads3", methods=["POST"])
+def upload_file_to_s3():
     try:
         # Receive 'id' from the JSON request body
-        id = (await req.json())["id"]
+        id = request.json.get("id")
 
         if not id:
-            raise HTTPException(status_code=400, detail="Missing 'id' in the request body")
+            raise ValueError("Missing 'id' in the request body")
 
         # Use an absolute path for the file
         current_date = datetime.now().strftime("%m-%d-%Y")
@@ -56,14 +42,12 @@ async def upload_file_to_s3(req: Request):
         # Upload the file to S3
         upload_to_s3(file_name, "naii-01-dir", s3_key)
 
-        return JSONResponse(content={"message": "File uploaded successfully to S3!"}, status_code=200)
-    except HTTPException as http_exc:
-        return JSONResponse(content={"message": str(http_exc.detail)}, status_code=http_exc.status_code)
+        return jsonify({"message": "File uploaded successfully to S3!"}), 200
+    except ValueError as value_error:
+        return jsonify({"message": str(value_error)}), 400
     except Exception as e:
-        print("error:",e)
-        return JSONResponse(content={"message": "Internal Server Error"}, status_code=500)
-
+        print("error:", e)
+        return jsonify({"message": "Internal Server Error"}), 500
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", reload=True, port=8000)
+    app.run(host="0.0.0.0", port=8000, debug=True)
