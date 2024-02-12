@@ -1,14 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import os
-import subprocess
-import logging
-import shutil
-from docx import Document
 import psycopg2
 import json
 import pandas as pd
 import datetime
+import os
+import subprocess
+from docx import Document
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -253,7 +251,5 @@ def upload_file_to_s3():
         print("error:", e)
         return jsonify({"message": "Internal Server Error","error":str(e)}), 500
 
-
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+if __name__ == '__main__':
+    app.run(debug=True)
