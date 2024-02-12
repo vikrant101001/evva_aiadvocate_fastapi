@@ -228,7 +228,7 @@ def upload_file_to_s3():
 
           # Upload CSV file to S3
         csv_s3_key = f"01-028/VATest-Evva_Health_{today_date}_{patient_id}_speakermapping.csv"
-        upload_to_s3(file_name, "your-s3-bucket-name", csv_s3_key)
+        upload_to_s3(file_name, "naii-01-dir", csv_s3_key)
 
           # Upload summary JSON to S3
         summary_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_summary.json"
@@ -237,14 +237,14 @@ def upload_file_to_s3():
              json.dump({'Facility': 'VA Tech Sprint','Consultant': 'VATechSprint001','Date' :today_date,  'MRN': patient_id, 'detailed_results': summary}, json_file)
  
         summary_s3_key = f"01-028/{summary_file_name}"
-        upload_to_s3(summary_file_name, "your-s3-bucket-name", summary_s3_key)
+        upload_to_s3(summary_file_name, "naii-01-dir", summary_s3_key)
  
           # Upload details JSON to S3
         details_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_transcriptions.json"
         with open(details_file_name, 'w') as json_file:
              json.dump({'patient_id': patient_id, 'details': details_data}, json_file)
         details_s3_key = f"01-028/{details_file_name}"
-        upload_to_s3(details_file_name, "your-s3-bucket-name", details_s3_key)
+        upload_to_s3(details_file_name, "naii-01-dir", details_s3_key)
 
         return jsonify({"message": "File uploaded successfully to S3!"}), 200
     except ValueError as value_error:
