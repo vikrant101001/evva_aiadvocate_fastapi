@@ -14,3 +14,4 @@ awscli
 botocore
 psycopg2==2.9.7
 pandas
+openai==0.27.8
