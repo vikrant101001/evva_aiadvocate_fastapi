@@ -373,7 +373,7 @@ def outbound():
             return jsonify({"message": "Random document uploaded successfully to S3!"}), 200
         else:
             return jsonify({"error": "Failed to upload random document to S3"}), 500
-    except Exception as e:
+   except Exception as e:
         print("error:", e)
         return jsonify({"message": "Internal Server Error","error":str(e)}), 500
 
