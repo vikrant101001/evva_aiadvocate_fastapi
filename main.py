@@ -11,139 +11,57 @@ from docx import Document
 import openai
 import os
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
+
+import json
+import base64
+
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
 
-def fhir(soap):
-  prompt = soap
-  response = openai.ChatCompletion.create(
-      model="gpt-4-1106-preview",
-      messages=[
-          {
-              "role":
-              "system",
-              "content":
-              """
-              You are a helpful assistant that converts/maps my json data to a specific FHIR format written below. Note: always return in a json format which can be dumped into a json file and also do not add anything before and after the json response even if it is an important note. i.e. the start of the response should be with the opening  '{' of a json file and the end of the response should be the closing '}' of the json and i dont want anything in starting like '```json\n' just start with how a json file starts because i am going to dump the results directly in a json file . THis is the FHIR format:
-              {
-              "resourceType" : "Encounter",
-              // from Resource: id, meta, implicitRules, and language
-              // from DomainResource: text, contained, extension, and modifierExtension
-              "identifier" : [{ Identifier }], // Identifier(s) by which this encounter is known
-              "status" : "<code>", // R!  planned | in-progress | on-hold | discharged | completed | cancelled | discontinued | entered-in-error | unknown
-              "class" : [{ CodeableConcept }], // Classification of patient encounter context - e.g. Inpatient, outpatient icon
-              "priority" : { CodeableConcept }, // Indicates the urgency of the encounter icon
-              "type" : [{ CodeableConcept }], // Specific type of encounter (e.g. e-mail consultation, surgical day-care, ...)
-              "serviceType" : [{ CodeableReference(HealthcareService) }], // Specific type of service
-              "subject" : { Reference(Group|Patient) }, // The patient or group related to this encounter
-              "subjectStatus" : { CodeableConcept }, // The current status of the subject in relation to the Encounter
-              "episodeOfCare" : [{ Reference(EpisodeOfCare) }], // Episode(s) of care that this encounter should be recorded against
-              "basedOn" : [{ Reference(CarePlan|DeviceRequest|MedicationRequest|
-               ServiceRequest) }], // The request that initiated this encounter
-              "careTeam" : [{ Reference(CareTeam) }], // The group(s) that are allocated to participate in this encounter
-              "partOf" : { Reference(Encounter) }, // Another Encounter this encounter is part of
-              "serviceProvider" : { Reference(Organization) }, // The organization (facility) responsible for this encounter
-              "participant" : [{ // List of participants involved in the encounter
-                "type" : [{ CodeableConcept }], // I Role of participant in encounter
-                "period" : { Period }, // Period of time during the encounter that the participant participated
-                "actor" : { Reference(Device|Group|HealthcareService|Patient|Practitioner|
-                PractitionerRole|RelatedPerson) } // I The individual, device, or service participating in the encounter
-              }],
-              "appointment" : [{ Reference(Appointment) }], // The appointment that scheduled this encounter
-              "virtualService" : [{ VirtualServiceDetail }], // Connection details of a virtual service (e.g. conference call)
-              "actualPeriod" : { Period }, // The actual start and end time of the encounter
-              "plannedStartDate" : "<dateTime>", // The planned start date/time (or admission date) of the encounter
-              "plannedEndDate" : "<dateTime>", // The planned end date/time (or discharge date) of the encounter
-              "length" : { Duration }, // Actual quantity of time the encounter lasted (less time absent)
-              "reason" : [{ // The list of medical reasons that are expected to be addressed during the episode of care
-                "use" : [{ CodeableConcept }], // What the reason value should be used for/as
-                "value" : [{ CodeableReference(Condition|DiagnosticReport|
-                ImmunizationRecommendation|Observation|Procedure) }] // Reason the encounter takes place (core or reference)
-              }],
-              "diagnosis" : [{ // The list of diagnosis relevant to this encounter
-                "condition" : [{ CodeableReference(Condition) }], // The diagnosis relevant to the encounter
-                "use" : [{ CodeableConcept }] // Role that this diagnosis has within the encounter (e.g. admission, billing, discharge …)
-              }],
-              "account" : [{ Reference(Account) }], // The set of accounts that may be used for billing for this Encounter
-              "dietPreference" : [{ CodeableConcept }], // Diet preferences reported by the patient
-              "specialArrangement" : [{ CodeableConcept }], // Wheelchair, translator, stretcher, etc
-              "specialCourtesy" : [{ CodeableConcept }], // Special courtesies (VIP, board member)
-              "admission" : { // Details about the admission to a healthcare service
-                "preAdmissionIdentifier" : { Identifier }, // Pre-admission identifier
-                "origin" : { Reference(Location|Organization) }, // The location/organization from which the patient came before admission
-                "admitSource" : { CodeableConcept }, // From where patient was admitted (physician referral, transfer)
-                "reAdmission" : { CodeableConcept }, // Indicates that the patient is being re-admitted icon
-                "destination" : { Reference(Location|Organization) }, // Location/organization to which the patient is discharged
-                "dischargeDisposition" : { CodeableConcept } // Category or kind of location after discharge
-              },
-              "location" : [{ // List of locations where the patient has been
-                "location" : { Reference(Location) }, // R!  Location the encounter takes place
-                "status" : "<code>", // planned | active | reserved | completed
-                "form" : { CodeableConcept }, // The physical type of the location (usually the level in the location hierarchy - bed, room, ward, virtual etc.)
-                "period" : { Period } // Time period during which the patient was present at the location
-              }]
 
-              And this is a sample response from you:
-              {
-                "resourceType": "Encounter",
-                "status": "unknown",  // Your JSON data doesn't specify encounter status, setting to "unknown"
-                "class": [],  // Your JSON data doesn't specify encounter class, setting to an empty array
-                "priority": null,  // Not specified in your JSON data
-                "type": [],  // Not specified in your JSON data
-                "serviceType": [],  // Not specified in your JSON data
-                "subject": {
-                  "reference": "Patient/Ybbc4109"  // Assuming MRN is the patient ID
-                },
-                "subjectStatus": null,  // Not specified in your JSON data
-                "episodeOfCare": [],  // Not specified in your JSON data
-                "basedOn": [],  // Not specified in your JSON data
-                "careTeam": [],  // Not specified in your JSON data
-                "partOf": null,  // Not specified in your JSON data
-                "serviceProvider": null,  // Not specified in your JSON data
-                "participant": [],  // Not specified in your JSON data
-                "appointment": [],  // Not specified in your JSON data
-                "virtualService": [],  // Not specified in your JSON data
-                "actualPeriod": null,  // Not specified in your JSON data
-                "plannedStartDate": "2024-02-12T00:00:00Z",  // Assuming Date from your JSON data is the planned start date/time
-                "plannedEndDate": "2024-02-12T23:59:59Z",  // Assuming Date from your JSON data is the planned end date/time
-                "length": null,  // Not specified in your JSON data
-                "reason": [  // Mapping reasons from your JSON data
-                  {
-                    "valueReference": {
-                      "reference": "Condition/lower-back-pain"  // Assuming this is the FHIR reference to the condition
-                    }
-                  }
-                ],
-                "diagnosis": [],  // Not specified in your JSON data
-                "account": [],  // Not specified in your JSON data
-                "dietPreference": [],  // Not specified in your JSON data
-                "specialArrangement": [],  // Not specified in your JSON data
-                "specialCourtesy": [],  // Not specified in your JSON data
-                "admission": {  // Not specified in your JSON data
-                  "preAdmissionIdentifier": null,
-                  "origin": null,
-                  "admitSource": null,
-                  "reAdmission": null,
-                  "destination": null,
-                  "dischargeDisposition": null
-                },
-                "location": []  // Not specified in your JSON data
-              }
+def generate_fhir_document_reference(json_data):
+    # Convert JSON to string
+    json_string = json.dumps(json_data)
 
-""",
-          },
-          {
-              "role": "user",
-              "content": prompt
-          },
-      ],
-  )
-  result = response['choices'][0]['message']['content']
-  return result
+    # Encode the string to Base64
+    base64_encoded_data = base64.b64encode(json_string.encode()).decode()
 
+    fhir_document_reference = {
+        "resourceType": "DocumentReference",
+        "identifier": [
+            {
+                "system": "http://example.org/documents",
+                "value": json_data["Consultant"]  # Assuming Consultant is unique identifier
+            }
+        ],
+        "version": "1",  # Assuming version 1
+        "status": "current",  # Assuming current status
+        "type": {
+            "text": "Consultation Document"
+        },
+        "subject": {
+            "reference": f"Patient/{json_data['MRN']}"  # Assuming MRN is the patient identifier
+        },
+        "date": "2024-02-19T00:00:00Z",  # Assuming fixed date format
+        "author": [
+            {
+                "reference": f"Practitioner/{json_data['Consultant']}"  # Assuming Consultant is the author
+            }
+        ],
+        "content": [
+            {
+                "attachment": {
+                    "contentType": "application/json",
+                    "data": base64_encoded_data,
+                    "title": "Consultation Document"
+                }
+            }
+        ]
+    }
 
+    return fhir_document_reference
 
 
 
@@ -372,25 +290,34 @@ def upload_file_to_s3():
         upload_to_s3(file_name, "naii-01-dir", csv_s3_key)
 
           # Upload summary JSON to S3
-        summary_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_summary.json"
+        summary_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_FHIRnotes.json"
           # Create JSON file with patient ID and summary
         
         soap = json.dumps({'Facility': 'VA Tech Sprint', 'Consultant': 'VATechSprint001', 'Date': today_date, 'MRN': patient_id, 'detailed_results': summary})
+        soap_dict = json.loads(soap)
+
+        fhir_data = generate_fhir_document_reference(soap_dict)
+        print(json.dumps(fhir_data, indent=2))
         
  
 
-        result = fhir(soap)
-
-         # Convert the result string to a dictionary
-        result_dict = json.loads(result)
-
          
         with open(summary_file_name, 'w') as json_file:
-           json.dump(result_dict, json_file,
-                indent=2)  # Use indent=2 for pretty formatting
+           json.dump(fhir_data, json_file, indent=2)  # Use indent=2 for pretty formatting
 
         summary_s3_key = f"01-028/{summary_file_name}"
         upload_to_s3(summary_file_name, "naii-01-dir", summary_s3_key)
+
+
+
+        decoded_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_decodednotes.json"
+        with open(decoded_file_name, 'w') as json_file:
+           json.dump(soap, json_file, indent=2)  # Use indent=2 for pretty formatting
+
+        decoded_s3_key = f"01-028/{decoded_file_name}"
+        upload_to_s3(decoded_file_name, "naii-01-dir", decoded_s3_key)
+
+
  
           # Upload details JSON to S3
         details_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_transcriptions.json"
