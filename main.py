@@ -14,6 +14,11 @@ import os
 import json
 import base64
 
+import requests
+from docx import Document
+from io import BytesIO
+import random
+import string
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
