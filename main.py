@@ -360,9 +360,12 @@ def outbound():
         doc.save(buffer)
         buffer.seek(0)
 
+        # Base64 encode the binary data
+        encoded_data = base64.b64encode(buffer.read()).decode()
+
         azure_function_url = "https://vaoutboundapp.azurewebsites.net"
         payload = {
-            'file_data': buffer.read(),
+            'file_data': encoded_data,
             's3_bucket': s3_bucket,
             's3_key': s3_key
         }
