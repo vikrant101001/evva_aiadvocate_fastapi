@@ -20,9 +20,26 @@ from io import BytesIO
 import random
 import string
 
+
+import boto3
+
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+# Retrieve AWS credentials from environment variables
+aws_access_key_id = os.environ.get('AWS_ACCESS_KEY_ID')
+aws_secret_access_key = os.environ.get('AWS_SECRET_ACCESS_KEY')
+aws_default_region = os.environ.get('AWS_DEFAULT_REGION')
+
+# Set up AWS session
+session = boto3.Session(
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
+    region_name=aws_default_region
+)
+
+# Now you can use the session to interact with AWS services, e.g.:
+s3 = session.client('s3')
 
 
 def generate_fhir_document_reference(json_data):
