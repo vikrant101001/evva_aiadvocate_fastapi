@@ -307,11 +307,13 @@ def upload_file_to_s3():
         today_date = datetime.date.today().strftime("%m-%d-%Y")
 
           # Upload CSV file to S3
-        csv_s3_key = f"01-028/VATest-Evva_Health_{today_date}_{patient_id}_speakermapping.csv"
+        #csv_s3_key = f"01-028/VATest-Evva_Health_{today_date}_{patient_id}_speakermapping.csv"
+        csv_s3_key = f"01-028/T1_Gate2_speakermapping{patient_id}.json"
         upload_to_s3(file_name, "naii-01-dir", csv_s3_key)
 
           # Upload summary JSON to S3
-        summary_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_FHIRnotes.json"
+        #summary_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_FHIRnotes.json"
+        summary_file_name = f"T1_Gate2_FHIR{patient_id}.json"
           # Create JSON file with patient ID and summary
         
         soap = json.dumps({'Facility': 'VA Tech Sprint', 'Consultant': 'VATechSprint001', 'Date': today_date, 'MRN': patient_id, 'detailed_results': summary})
@@ -331,7 +333,8 @@ def upload_file_to_s3():
 
 
 
-        decoded_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_decodednotes.json"
+        #decoded_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_decodednotes.json"
+        decoded_file_name = f"T1_Gate2_decodednotes{patient_id}.json"
         with open(decoded_file_name, 'w') as json_file:
            json.dump(soap, json_file, indent=2)  # Use indent=2 for pretty formatting
 
@@ -341,7 +344,8 @@ def upload_file_to_s3():
 
  
           # Upload details JSON to S3
-        details_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_transcriptions.json"
+        #details_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_transcriptions.json"
+        details_file_name = f"T1_Gate2_transcriptions{patient_id}.json"
         with open(details_file_name, 'w') as json_file:
              json.dump({'patient_id': patient_id, 'details': details_data}, json_file)
         details_s3_key = f"01-028/{details_file_name}"
@@ -355,47 +359,7 @@ def upload_file_to_s3():
         return jsonify({"message": "Internal Server Error","error":str(e)}), 500
 
 
-@app.route('/outbound', methods=['POST'])
-def outbound():
-   try:
-        req_data = request.get_json()
-        s3_bucket = req_data.get('s3_bucket')
-        s3_key = req_data.get('s3_key')
 
-        if not s3_bucket or not s3_key:
-            return jsonify({'error': 'Missing required parameters'})
-
-        # Generate random content for the .docx file
-        content = ''.join(random.choices(string.ascii_letters + string.digits, k=1000))
-
-        # Create a new Word document
-        doc = Document()
-        doc.add_paragraph(content)
-
-        # Save the document to a BytesIO buffer
-        buffer = BytesIO()
-        doc.save(buffer)
-        buffer.seek(0)
-
-        # Base64 encode the binary data
-        encoded_data = base64.b64encode(buffer.read()).decode()
-
-        azure_function_url = "https://vaoutboundapp.azurewebsites.net"
-        payload = {
-            'file_data': encoded_data,
-            's3_bucket': s3_bucket,
-            's3_key': s3_key
-        }
-
-        response = requests.post(azure_function_url, json=payload)
-
-        if response.status_code == 200:
-            return jsonify({"message": "Random document uploaded successfully to S3!"}), 200
-        else:
-            return jsonify({"error": "Failed to upload random document to S3"}), 500
-   except Exception as e:
-        print("error:", e)
-        return jsonify({"message": "Internal Server Error","error":str(e)}), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
