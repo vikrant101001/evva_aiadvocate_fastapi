@@ -162,7 +162,7 @@ def process_and_generate_csv(data, patient_id):
         today_date = datetime.date.today().strftime("%m-%d-%Y")
 
         # Constructing the file name
-        file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_speakermapping.csv"
+        file_name = f"T1_Gate2_speakermapping{patient_id}.csv"
 
         # Export DataFrame to CSV
         print("Exporting DataFrame to CSV...")  # Debug statement
@@ -308,7 +308,7 @@ def upload_file_to_s3():
 
           # Upload CSV file to S3
         #csv_s3_key = f"01-028/VATest-Evva_Health_{today_date}_{patient_id}_speakermapping.csv"
-        csv_s3_key = f"01-028/T1_Gate2_speakermapping{patient_id}.json"
+        csv_s3_key = f"01-028/T1_Gate2_speakermapping{patient_id}.csv"
         upload_to_s3(file_name, "naii-01-dir", csv_s3_key)
 
           # Upload summary JSON to S3
