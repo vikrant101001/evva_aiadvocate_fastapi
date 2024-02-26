@@ -113,7 +113,7 @@ def fetch_data_from_db(patient_id):
         return None
 
 # Function to process JSON data and generate CSV file
-def process_and_generate_csv(data, patient_id):
+def process_and_generate_csv(data, api_call_counter):
     try:
         print("Data received for processing:", data)  # Debug statement
         print("Type of data received:", type(data))  # Debug statement
@@ -162,7 +162,7 @@ def process_and_generate_csv(data, patient_id):
         today_date = datetime.date.today().strftime("%m-%d-%Y")
 
         # Constructing the file name
-        file_name = f"T1_Gate2_speakermapping{patient_id}.csv"
+        file_name = f"T1_Gate2_speakermapping{api_call_counter}.csv"
 
         # Export DataFrame to CSV
         print("Exporting DataFrame to CSV...")  # Debug statement
@@ -264,9 +264,16 @@ def upload_to_s3(file_path, s3_bucket, s3_key):
 def hello_world():
   return 'api online'
 
+# Define a global variable to store the counter
+api_call_counter = -1
+
 @app.route('/uploads3', methods=['POST'])
 def upload_file_to_s3():
+    global api_call_counter  # Access the global variable
     try:
+        # Increment the counter for each API call
+        api_call_counter += 1
+        
         req_data = request.get_json()
         patient_id = req_data.get('patient_id')
 
@@ -280,7 +287,7 @@ def upload_file_to_s3():
           return jsonify({'error': 'No data found for the given patient ID'})
 
         # Process data and generate CSV
-        file_name = process_and_generate_csv(data, patient_id)
+        file_name = process_and_generate_csv(data, api_call_counter)
 
         if not file_name:
             return jsonify({'error': 'Error occurred while processing data'})
@@ -308,12 +315,12 @@ def upload_file_to_s3():
 
           # Upload CSV file to S3
         #csv_s3_key = f"01-028/VATest-Evva_Health_{today_date}_{patient_id}_speakermapping.csv"
-        csv_s3_key = f"01-028/T1_Gate2_speakermapping{patient_id}.csv"
+        csv_s3_key = f"01-028/T1_Gate2_speakermapping{api_call_counter}.csv"
         upload_to_s3(file_name, "naii-01-dir", csv_s3_key)
 
           # Upload summary JSON to S3
         #summary_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_FHIRnotes.json"
-        summary_file_name = f"T1_Gate2_FHIR{patient_id}.json"
+        summary_file_name = f"T1_Gate2_FHIR{api_call_counter}.json"
           # Create JSON file with patient ID and summary
         
         soap = json.dumps({'Facility': 'VA Tech Sprint', 'Consultant': 'VATechSprint001', 'Date': today_date, 'MRN': patient_id, 'detailed_results': summary})
@@ -334,7 +341,7 @@ def upload_file_to_s3():
 
 
         #decoded_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_decodednotes.json"
-        decoded_file_name = f"T1_Gate2_decodednotes{patient_id}.json"
+        decoded_file_name = f"T1_Gate2_decodednotes{api_call_counter}.json"
         with open(decoded_file_name, 'w') as json_file:
            json.dump(soap, json_file, indent=2)  # Use indent=2 for pretty formatting
 
@@ -345,7 +352,7 @@ def upload_file_to_s3():
  
           # Upload details JSON to S3
         #details_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_transcriptions.json"
-        details_file_name = f"T1_Gate2_transcriptions{patient_id}.json"
+        details_file_name = f"T1_Gate2_transcriptions{api_call_counter}.json"
         with open(details_file_name, 'w') as json_file:
              json.dump({'patient_id': patient_id, 'details': details_data}, json_file)
         details_s3_key = f"01-028/{details_file_name}"
