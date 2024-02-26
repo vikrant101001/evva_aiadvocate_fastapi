@@ -265,7 +265,7 @@ def hello_world():
   return 'api online'
 
 # Define a global variable to store the counter
-api_call_counter = 2702
+api_call_counter = 0
 
 @app.route('/uploads3', methods=['POST'])
 def upload_file_to_s3():
