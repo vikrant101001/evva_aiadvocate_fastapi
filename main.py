@@ -341,7 +341,7 @@ def upload_file_to_s3():
 
 
         #decoded_file_name = f"VATest-Evva_Health_{today_date}_{patient_id}_decodednotes.json"
-        decoded_file_name = f"T1_Gate2_decodednotes{api_call_counter}.json"
+        decoded_file_name = f"T1_Gate2_Encounter{api_call_counter}.json"
         with open(decoded_file_name, 'w') as json_file:
            json.dump(soap, json_file, indent=2)  # Use indent=2 for pretty formatting
 
